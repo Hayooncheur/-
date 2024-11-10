@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OX 퀴즈</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin: 0; padding: 0; }
+        .header { padding: 15px; text-align: center; }
+        .logo { max-width: 300px; width: 100%; }
+        .question {
+            height: 40vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: #f0f0f0;
+            font-size: 72px; /* 텍스트 크기 3배 증가 */
+            text-align: center;
+            line-height: 1.4;
+            font-weight: bold;
+        }
+        .button-container {
+            height: 60vh;
+            display: flex;
+        }
+        .btn-o, .btn-x {
+            width: 50%;
+            font-size: 60px;
+            border: none;
+            color: white;
+        }
+        .btn-o { background: #4CAF50; }
+        .btn-x { background: #f44336; }
+        #resultMessage {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            display: none;
+            text-align: center;
+            font-size: 48px; /* 결과 메시지 크기도 키움 */
+        }
+        .result-image {
+            width: 300px; /* 결과 이미지 크기도 키움 */
+            height: 300px;
+            margin: 20px auto;
+            display: block;
+        }
+        @media (max-width: 768px) {
+            .question {
+                font-size: 48px; /* 모바일에서는 약간 작게 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="hwaceongsen-rogo.jpg" alt="화곡청소년센터" class="logo">
+    </div>
+    <div class="question" id="questionText"></div>
+    <div class="button-container">
+        <button class="btn-o" onclick="checkAnswer('O')">O</button>
+        <button class="btn-x" onclick="checkAnswer('X')">X</button>
+    </div>
+    <div id="resultMessage">
+        <div id="messageText"></div>
+        <img id="resultImage" class="result-image">
+    </div>
+
+    <script>
+        const questions = [
+            { question: "대한민국의 수도는 서울이다.", answer: "O" },
+            { question: "1+1=3이다.", answer: "X" },
+            { question: "지구는 둥글다.", answer: "O" }
+        ];
+
+        const correctImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='none' stroke='%234CAF50' stroke-width='10'/%3E%3C/svg%3E";
+        const wrongImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cline x1='20' y1='20' x2='80' y2='80' stroke='%23f44336' stroke-width='10'/%3E%3Cline x1='80' y1='20' x2='20' y2='80' stroke='%23f44336' stroke-width='10'/%3E%3C/svg%3E";
+
+        let currentQuestion = 0;
+
+        function showQuestion() {
+            document.getElementById('questionText').textContent = 
+                questions[currentQuestion].question;
+        }
+
+        function checkAnswer(userAnswer) {
+            const resultMessage = document.getElementById('resultMessage');
+            const messageText = document.getElementById('messageText');
+            const resultImage = document.getElementById('resultImage');
+            const isCorrect = userAnswer === questions[currentQuestion].answer;
+            
+            messageText.textContent = isCorrect ? "정답입니다!" : "틀렸습니다!";
+            resultImage.src = isCorrect ? correctImage : wrongImage;
+            resultMessage.style.display = 'block';
+            
+            setTimeout(() => {
+                resultMessage.style.display = 'none';
+                currentQuestion = (currentQuestion + 1) % questions.length;
+                showQuestion();
+            }, 3000); // 3초로 변경
+        }
+
+        window.onload = showQuestion;
+    </script>
+</body>
+</html>
